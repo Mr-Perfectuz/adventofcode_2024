@@ -8,5 +8,9 @@
   },
   "type": "module",
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.6",
+    "node-fetch": "^3.3.2"
+  }
 }
