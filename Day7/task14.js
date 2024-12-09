@@ -1,6 +1,6 @@
-import fetch from 'node-fetch';
+import fetch from "node-fetch";
 
-const url = 'https://adventofcode.com/2024/day/7/input';
+const url = "https://adventofcode.com/2024/day/7/input";
 
 const cookies = {
   session: process.env.SESSION,
@@ -15,14 +15,14 @@ async function fetchInput() {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch input');
+      throw new Error("Failed to fetch input");
     }
 
     const data = await response.text();
 
-    return data.trim().split('\n');
+    return data.trim().split("\n");
   } catch (error) {
-    console.error('Error fetching input:', error);
+    console.error("Error fetching input:", error);
     return null;
   }
 }
@@ -34,11 +34,11 @@ function validate(numbers, operators) {
     const num = numbers[i + 1];
     const op = operators[i];
 
-    if (op === '+') {
+    if (op === "+") {
       result += num;
-    } else if (op === '*') {
+    } else if (op === "*") {
       result *= num;
-    } else if (op === '||') {
+    } else if (op === "||") {
       result = parseInt(result.toString() + num.toString(), 10);
     }
   }
@@ -47,7 +47,7 @@ function validate(numbers, operators) {
 }
 
 function getComb(length) {
-  const operators = ['+', '*', '||'];
+  const operators = ["+", "*", "||"];
   const combinations = [];
   const totalCombinations = Math.pow(operators.length, length);
 
@@ -67,8 +67,8 @@ function getComb(length) {
 }
 
 function checkEquation(testValue, numbers) {
-  const operatorCombinations = getComb(numbers.length - 1);
-  for (let operators of operatorCombinations) {
+  const operator_comb = getComb(numbers.length - 1);
+  for (let operators of operator_comb) {
     const result = validate(numbers, operators);
     if (result === testValue) {
       return true;
@@ -80,16 +80,16 @@ function checkEquation(testValue, numbers) {
 async function solve() {
   const input = await fetchInput();
   if (!input) {
-    console.log('Error fetching input.');
+    console.log("Error fetching input.");
     return;
   }
 
   let result = 0;
 
   for (let line of input) {
-    const [testValueStr, numbersStr] = line.split(':');
+    const [testValueStr, numbersStr] = line.split(":");
     const testValue = parseInt(testValueStr, 10);
-    const numbers = numbersStr.trim().split(' ').map(Number);
+    const numbers = numbersStr.trim().split(" ").map(Number);
 
     if (checkEquation(testValue, numbers)) {
       result += testValue;
