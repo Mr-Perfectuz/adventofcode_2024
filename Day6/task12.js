@@ -1,8 +1,8 @@
-import fetch from "node-fetch";
-import dotenv from "dotenv";
+import fetch from 'node-fetch';
+import dotenv from 'dotenv';
 dotenv.config();
 
-const url = "https://adventofcode.com/2024/day/6/input";
+const url = 'https://adventofcode.com/2024/day/6/input';
 
 const cookies = {
   session: process.env.SESSION,
@@ -40,9 +40,9 @@ async function simulateGuard(map, startX, startY, startDirection) {
       return false;
     }
 
-    if (map[nextY][nextX] === "#") {
+    if (map[nextY][nextX] === '#') {
       direction = (direction + 1) % 4;
-    } else if (map[nextY][nextX] === ".") {
+    } else if (map[nextY][nextX] === '.') {
       x = nextX;
       y = nextY;
     } else {
@@ -56,14 +56,14 @@ async function Day6(map, startX, startY, startDirection) {
 
   for (let y = 0; y < map.length; y++) {
     for (let x = 0; x < map[0].length; x++) {
-      if (map[y][x] === "." && !(x === startX && y === startY)) {
-        map[y][x] = "O";
+      if (map[y][x] === '.' && !(x === startX && y === startY)) {
+        map[y][x] = 'O';
 
         if (await simulateGuard(map, startX, startY, startDirection)) {
           validPositions++;
         }
 
-        map[y][x] = ".";
+        map[y][x] = '.';
       }
     }
   }
@@ -73,14 +73,14 @@ async function Day6(map, startX, startY, startDirection) {
 
 async function fetchMapData() {
   const response = await fetch(url, {
-    method: "GET",
+    method: 'GET',
     headers: {
       Cookie: `session=${cookies.session}`,
     },
   });
 
   const mapData = await response.text();
-  return mapData.split("\n").map((line) => line.split(""));
+  return mapData.split('\n').map((line) => line.split(''));
 }
 
 async function main() {

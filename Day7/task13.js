@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 const url = 'https://adventofcode.com/2024/day/7/input';
 const cookies = {
   session: process.env.SESSION,
