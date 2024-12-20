@@ -2,10 +2,10 @@ import fetch from "node-fetch";
 import dotenv from "dotenv";
 dotenv.config();
 
-const url = "https://adventofcode.com/2024/day/3/input";
+const url = "https://adventofcode.com/2024/day/21/input";
 
 const cookies = {
-  session: process.env.SESSION,
+  session: process.env,
 };
 
 async function cleanData() {
