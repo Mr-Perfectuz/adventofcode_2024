@@ -14,5 +14,8 @@
     "dotenv": "^16.4.6",
     "fs": "^0.0.1-security",
     "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2"
   }
 }
