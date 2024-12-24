@@ -1,46 +1,70 @@
-def mix(secret, value):
-    """Mix a value into the secret number using XOR."""
-    return secret ^ value
+from collections import defaultdict
+from itertools import combinations
 
-def prune(secret):
-    """Prune the secret number using modulo 16777216."""
-    return secret % 16777216
+def read_network_map(filename: str):
+    """Read the network connections from file."""
+    connections = []
+    with open(filename) as f:
+        for line in f:
+            if line.strip():  # Skip empty lines
+                comp1, comp2 = line.strip().split('-')
+                connections.append((comp1, comp2))
+    return connections
 
-def generate_next_secret(secret):
-    """Generate the next secret number using the specified rules."""
- 
-    result = mix(secret, secret * 64)
-    result = prune(result)
+def build_graph(connections):
+    """Build adjacency list representation of the network."""
+    graph = defaultdict(set)
+    for comp1, comp2 in connections:
+        graph[comp1].add(comp2)
+        graph[comp2].add(comp1)
+    return graph
+
+def find_triangles(graph):
+    """Find all sets of three inter-connected computers."""
+    triangles = set()
+    computers = list(graph.keys())
     
- 
-    result = mix(result, result // 32)
-    result = prune(result)
+    for comp in computers:
+         
+        neighbors = list(graph[comp])
+         
+        for i in range(len(neighbors)):
+            for j in range(i + 1, len(neighbors)):
+                
+                if neighbors[j] in graph[neighbors[i]]:
+                    
+                    triangle = tuple(sorted([comp, neighbors[i], neighbors[j]]))
+                    triangles.add(triangle)
     
+    return triangles
+
+def count_t_triangles(triangles):
+    """Count triangles containing at least one computer starting with 't'."""
+    return sum(1 for triangle in triangles 
+              if any(comp.startswith('t') for comp in triangle))
+
+def solve(filename):
+   
+    connections = read_network_map(filename)
  
-    result = mix(result, result * 2048)
-    result = prune(result)
+    graph = build_graph(connections)
     
-    return result
-
-def find_nth_secret(initial_secret, n):
-    """Find the nth new secret number for a given initial secret."""
-    current = initial_secret
-    for _ in range(n):
-        current = generate_next_secret(current)
-    return current
-
- 
-with open('input.txt', 'r') as file:
-    initial_secrets = [int(line.strip()) for line in file]
-
-target_n = 2000
-
- 
-results = []
-for initial in initial_secrets:
-    nth_secret = find_nth_secret(initial, target_n)
-    results.append(nth_secret)
+   
+    triangles = find_triangles(graph)
+    
+     
+    print("\nAll triangles found:")
+    for triangle in sorted(triangles):
+        print(','.join(triangle))
+    
+  
+    t_count = count_t_triangles(triangles)
+    
+    print(f"\nTotal triangles: {len(triangles)}")
+    print(f"Triangles with 't' computers: {t_count}")
+    
+    return t_count
 
  
-total = sum(results)
-print(f"Sum of {target_n}th secrets: {total}")
+result = solve('input.txt')
+print(f"\nAnswer: {result}")
